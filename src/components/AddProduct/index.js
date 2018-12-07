@@ -37,6 +37,18 @@ class AddProduct extends Component {
 
   handleSubmitClick = async () => {
     /* TODO - step 14: push data in Firebase db using transactions */
+    let self = this;
+    const db = firebase.firestore();
+    db.collection("devices").where("name", "==", self.state.selectedOption)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        console.log(doc.data());
+        db.collection("devices").doc(doc.id).update({
+            daysOut: doc.data().daysOut + 1
+          });
+      });
+    })
   };
 
   render = () => {
