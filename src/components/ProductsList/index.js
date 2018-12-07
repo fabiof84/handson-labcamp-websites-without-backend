@@ -11,15 +11,18 @@ class ProductsList extends Component {
   }
 
   componentDidMount = () => {
+    const db = firebase.firestore();
+    let self = this;
+    const products = [];
     // TODO step 5 - fetch data from Firebase
-    const rootRef = firebase.database().ref("/group-1");
-    rootRef.on("value", snapshot => {
-      const products = [];
-      for (let key in snapshot.val()) {
-        products.push(snapshot.val()[key])
-      }
-      this.setState({products});
-    })
+    db.collection("devices").get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(device) {
+        products.push(device.data())
+      });
+      self.setState({
+        products: products
+      });
+    });
   };
 
   render = () => {
@@ -30,9 +33,9 @@ class ProductsList extends Component {
           <ul className="list-group">
             { this.state.products.map( (product, index) => {
               return (
-                <li className="list-group-item">
+                <li className="list-group-item" key={index}>
                   {product.name}
-                <span className="badge badge-pill badge-success">{product.count}</span>
+                <span className="badge badge-pill badge-success">{product.daysOut}</span>
                 </li>
               )}) }
           </ul>
