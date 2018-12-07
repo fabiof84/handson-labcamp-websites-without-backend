@@ -13,16 +13,16 @@ class ProductsList extends Component {
   componentDidMount = () => {
     const db = firebase.firestore();
     let self = this;
-    const products = [];
     // TODO step 5 - fetch data from Firebase
-    db.collection("devices").get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(device) {
-        products.push(device.data())
-      });
-      self.setState({
-        products: products
-      });
-    });
+    db.collection("devices").onSnapshot(function(querySnapshot) {
+        const products = [];
+        querySnapshot.forEach(function(device) {
+          products.push(device.data())
+        });
+        self.setState({
+          products: products
+        });
+    })
   };
 
   render = () => {

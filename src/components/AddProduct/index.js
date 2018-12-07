@@ -16,9 +16,9 @@ class AddProduct extends Component {
     // TODO step 11 - fetch data from Firebase
     const db = firebase.firestore();
     let self = this;
-    const products = [];
     // TODO step 5 - fetch data from Firebase
-    db.collection("devices").get().then(function(querySnapshot) {
+    db.collection("devices").onSnapshot(function(querySnapshot) {
+      const products = [];
       querySnapshot.forEach(function(device) {
         products.push(device.data().name);
       })
@@ -43,7 +43,6 @@ class AddProduct extends Component {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        console.log(doc.data());
         db.collection("devices").doc(doc.id).update({
             daysOut: doc.data().daysOut + 1
           });
